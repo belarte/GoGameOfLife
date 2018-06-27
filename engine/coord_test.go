@@ -27,7 +27,32 @@ func TestCoordEquality(t *testing.T) {
 	for _, entry := range table {
 		result := entry.left == entry.right
 		if result != entry.expected {
-			t.Errorf("Error expected=%t but result=%t", entry.expected, result)
+			t.Errorf("Error expected=%t but result=%t\nleft=%v, right=%v",
+				entry.expected, result, entry.left, entry.right)
+		}
+	}
+}
+
+func TestCoordListEquality(t *testing.T) {
+	var table = []struct {
+		left     engine.List
+		right    engine.List
+		expected bool
+	}{
+		{engine.NewList(), engine.NewList(), true},
+		{engine.NewList(), engine.NewList(engine.New(1, 2)), false},
+		{engine.NewList(engine.New(1, 2)), engine.NewList(), false},
+		{engine.NewList(engine.New(1, 2)), engine.NewList(engine.New(1, 2)), true},
+		{engine.NewList(engine.New(1, 2)), engine.NewList(engine.New(3, 4)), false},
+		{engine.NewList(engine.New(1, 2)), engine.NewList(engine.New(1, 2), engine.New(3, 4)), false},
+		{engine.NewList(engine.New(1, 2), engine.New(3, 4)), engine.NewList(engine.New(1, 2), engine.New(3, 4)), true},
+	}
+
+	for _, entry := range table {
+		result := engine.Compare(entry.left, entry.right)
+		if result != entry.expected {
+			t.Errorf("Error expected=%t but result=%t\nleft=%v, right=%v",
+				entry.expected, result, entry.left, entry.right)
 		}
 	}
 }
