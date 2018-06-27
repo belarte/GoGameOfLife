@@ -1,16 +1,10 @@
-package engine
+package list
 
-type Coord struct {
-	X, Y int
-}
+import "github.com/belarte/GoGameOfLife/struct/coord"
 
-func New(x, y int) Coord {
-	return Coord{X: x, Y: y}
-}
+type List []coord.Coord
 
-type List []Coord
-
-func NewList(coords ...Coord) List {
+func New(coords ...coord.Coord) List {
 	list := List{}
 	list = append(list, coords...)
 	return list
