@@ -46,3 +46,20 @@ func TestNextChangeReturnsAddedAfterZeroStep(t *testing.T) {
 		}
 	}
 }
+
+func TestChangeListIsResetAfterAStep(t *testing.T) {
+	game := life.New()
+	game.Add(change.New(list.New(coord.New(1, 2)), list.New(coord.New(3, 4))))
+
+	changes := game.NextChangeList()
+	if change.Compare(changes, change.New(nil, nil)) {
+		t.Error("Change list should not be empty")
+	}
+
+	game.Step()
+
+	changes = game.NextChangeList()
+	if !change.Compare(changes, change.New(nil, nil)) {
+		t.Error("Change list should be empty")
+	}
+}

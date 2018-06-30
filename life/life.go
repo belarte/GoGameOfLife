@@ -28,6 +28,8 @@ func (g *game) Simulate(iterations int) {
 }
 
 func (g *game) Step() {
+	g.changes.Alive = nil
+	g.changes.Dead = nil
 }
 
 func (g *game) NextChangeList() change.List {
