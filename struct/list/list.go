@@ -2,11 +2,11 @@ package list
 
 import "github.com/belarte/GoGameOfLife/struct/coord"
 
-type List []coord.Coord
+type List map[coord.Coord]bool
 
 func New(coords ...coord.Coord) List {
-	list := List{}
-	list = append(list, coords...)
+	var list List = make(map[coord.Coord]bool)
+	list.Append(coords...)
 	return list
 }
 
@@ -22,4 +22,16 @@ func Compare(left, right List) bool {
 	}
 
 	return true
+}
+
+func (list List) Append(coords ...coord.Coord) {
+	for _, c := range coords {
+		list[c] = true
+	}
+}
+
+func (list List) Concat(other List) {
+	for key, value := range other {
+		list[key] = value
+	}
 }
