@@ -39,12 +39,44 @@ func (list List) Concat(other List) {
 	}
 }
 
+func (list List) Cover() List {
+	result := New()
+
+	for c, value := range list {
+		if value {
+			result.Append(c)
+			result.Concat(neighbours8(c))
+		}
+	}
+
+	return result
+}
+
+func neighbours8(c coord.Coord) List {
+	return New(
+		coord.New(c.X-1, c.Y-1),
+		coord.New(c.X-1, c.Y),
+		coord.New(c.X-1, c.Y+1),
+		coord.New(c.X, c.Y-1),
+		coord.New(c.X, c.Y+1),
+		coord.New(c.X+1, c.Y-1),
+		coord.New(c.X+1, c.Y),
+		coord.New(c.X+1, c.Y+1),
+	)
+}
+
 func (list List) String() string {
 	result := "["
+
 	for key, value := range list {
 		if value {
 			result += fmt.Sprintf("%v, ", key)
 		}
 	}
-	return result[:len(result)-2] + "]"
+
+	if len(result) > 1 {
+		result = result[:len(result)-2]
+	}
+
+	return result + "]"
 }
