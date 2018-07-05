@@ -14,3 +14,9 @@ func New(alive, dead list.List) List {
 func Compare(left, right List) bool {
 	return list.Compare(left.Alive, right.Alive) && list.Compare(left.Dead, right.Dead)
 }
+
+func (l List) Cover() list.List {
+	result := l.Alive.Cover()
+	result.Concat(l.Dead.Cover())
+	return result
+}
