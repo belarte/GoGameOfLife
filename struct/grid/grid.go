@@ -22,3 +22,7 @@ func (g Grid) Set(c coord.Coord, value int) {
 func (g Grid) Get(c coord.Coord) int {
 	return g.buffer[c.Y][c.X]
 }
+
+func (g Grid) Wrap(c coord.Coord) coord.Coord {
+	return coord.New((c.X+g.width)%g.width, (c.Y+g.height)%g.height)
+}

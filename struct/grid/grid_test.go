@@ -37,3 +37,30 @@ func TestGetAndSet(t *testing.T) {
 		}
 	}
 }
+
+func TestWrap(t *testing.T) {
+	grid := grid.New(4, 5)
+
+	var table = []struct {
+		input  coord.Coord
+		output coord.Coord
+	}{
+		{coord.New(0, 0), coord.New(0, 0)},
+		{coord.New(3, 4), coord.New(3, 4)},
+		{coord.New(2, 3), coord.New(2, 3)},
+		{coord.New(-1, 2), coord.New(3, 2)},
+		{coord.New(1, -1), coord.New(1, 4)},
+		{coord.New(4, 3), coord.New(0, 3)},
+		{coord.New(3, 5), coord.New(3, 0)},
+		{coord.New(4, 5), coord.New(0, 0)},
+		{coord.New(5, 4), coord.New(1, 4)},
+		{coord.New(-2, 0), coord.New(2, 0)},
+	}
+
+	for i, entry := range table {
+		result := grid.Wrap(entry.input)
+		if result != entry.output {
+			t.Errorf("[%d] Error expected=%v but result=%v", i, entry.output, result)
+		}
+	}
+}
