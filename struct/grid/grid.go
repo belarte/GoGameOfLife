@@ -1,6 +1,10 @@
 package grid
 
-import "github.com/belarte/GoGameOfLife/struct/coord"
+import (
+	"fmt"
+
+	"github.com/belarte/GoGameOfLife/struct/coord"
+)
 
 type Grid struct {
 	buffer        [][]int
@@ -25,4 +29,12 @@ func (g Grid) Get(c coord.Coord) int {
 
 func (g Grid) Wrap(c coord.Coord) coord.Coord {
 	return coord.New((c.X+g.width)%g.width, (c.Y+g.height)%g.height)
+}
+
+func (g Grid) String() string {
+	result := ""
+	for _, line := range g.buffer {
+		result += fmt.Sprintf("%v\n", line)
+	}
+	return result
 }
