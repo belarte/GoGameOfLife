@@ -10,7 +10,7 @@ import (
 )
 
 func TestNextChangeReturnsAddedAfterZeroStep(t *testing.T) {
-	game := life.New()
+	game := life.New(32, 32)
 
 	var table = []struct {
 		in  change.List
@@ -47,19 +47,33 @@ func TestNextChangeReturnsAddedAfterZeroStep(t *testing.T) {
 	}
 }
 
-func TestChangeListIsResetAfterAStep(t *testing.T) {
-	game := life.New()
-	game.Add(change.New(list.New(coord.New(1, 2)), list.New(coord.New(3, 4))))
+func TestStepProducesCorrectChangeList(t *testing.T) {
+	game := life.New(5, 5)
+	game.Add(change.New(list.New(coord.New(2, 1), coord.New(3, 2), coord.New(1, 3), coord.New(2, 3), coord.New(3, 3)), list.New()))
 
-	changes := game.NextChangeList()
-	if change.Compare(changes, change.New(nil, nil)) {
-		t.Error("Change list should not be empty")
+	var table = []struct {
+		expected change.List
+	}{
+		{change.New(
+			list.New(coord.New(1, 2), coord.New(2, 4)),
+			list.New(coord.New(2, 1), coord.New(1, 3)))},
+		{change.New(
+			list.New(coord.New(1, 3), coord.New(3, 4)),
+			list.New(coord.New(1, 2), coord.New(2, 3)))},
+		{change.New(
+			list.New(coord.New(2, 2), coord.New(4, 3)),
+			list.New(coord.New(3, 2), coord.New(1, 3)))},
+		{change.New(
+			list.New(coord.New(3, 2), coord.New(4, 4)),
+			list.New(coord.New(2, 2), coord.New(3, 3)))},
 	}
 
-	game.Step()
+	for i, entry := range table {
+		game.Step()
+		result := game.NextChangeList()
 
-	changes = game.NextChangeList()
-	if !change.Compare(changes, change.New(nil, nil)) {
-		t.Error("Change list should be empty")
+		if !change.Compare(result, entry.expected) {
+			t.Errorf("[%d] Error expected=%v but result=%v\n%v", i, entry.expected, result, game)
+		}
 	}
 }
